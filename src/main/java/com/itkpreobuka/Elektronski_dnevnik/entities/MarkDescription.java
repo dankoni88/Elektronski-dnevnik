@@ -12,8 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.itkpreobuka.Elektronski_dnevnik.enums.MarkType;
 @Entity
@@ -22,15 +23,24 @@ public class MarkDescription {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
+	
 	@Version
 	private Integer version;
+	
 	protected MarkType type;
+	
+	@NotNull(message = "Notation must be provided.")
 	protected String notation;
+	
+	@NotNull(message = "Date must be provided.")
 	protected LocalDate date;
-	@JsonIgnore
+	
+	@JsonBackReference
 	@OneToMany(mappedBy="description",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 	protected List<Mark> marks=new ArrayList<>();
+	
 	public MarkDescription() {}
+	
 	public Integer getId() {
 		return id;
 	}

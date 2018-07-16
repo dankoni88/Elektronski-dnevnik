@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,19 +22,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name="Subjects")
 @JsonIgnoreProperties({"hybernateLazyInitializer","handler"})
 public class SubjectEntity {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column
 	protected Integer id;
+	
 	@Version
 	@Column
 	protected Integer version;
+	
+	@NotNull(message = "Name of the subject must be provided.")
 	@Column(nullable=false)
 	protected String name;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="subject",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 	protected List<GradeSubjectEntity> list=new ArrayList<>();
+	
 	private SubjectEntity() {}
+	
 	public Integer getId() {
 		return id;
 	}

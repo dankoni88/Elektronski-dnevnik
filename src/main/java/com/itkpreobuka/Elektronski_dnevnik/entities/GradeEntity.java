@@ -13,28 +13,39 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class GradeEntity {
+	
 @Id
 @GeneratedValue(strategy=GenerationType.AUTO)
 @Column
 private Integer id;
+
 @Version
+@Column
 private Integer version;
+
+@NotNull(message="Value must be provided.")
+//@Pattern(regexp="^[1-8]{1}$")
 private String value;
-@JsonIgnore
+
+@JsonBackReference
 @OneToMany(mappedBy="grade",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 private List<ClassEntity> classes=new ArrayList<>();
-@JsonIgnore
+
+@JsonBackReference
 @OneToMany(mappedBy="grade",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 protected List<GradeSubjectEntity> list=new ArrayList<>();
+
 public GradeEntity() {}
+
 public Integer getId() {
 	return id;
 }

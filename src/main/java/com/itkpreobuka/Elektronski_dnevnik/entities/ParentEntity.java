@@ -9,13 +9,14 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="Parents")
 public class ParentEntity extends UserEntity {
-	@JsonIgnore
+	
+	@JsonBackReference
 	@OneToMany(mappedBy="parent",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 	private List<StudentEntity> children=new ArrayList<>();
 	public ParentEntity() {}

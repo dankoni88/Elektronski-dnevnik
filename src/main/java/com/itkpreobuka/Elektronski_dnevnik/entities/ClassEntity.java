@@ -14,30 +14,45 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class ClassEntity {
+	
 @Id
 @GeneratedValue(strategy=GenerationType.AUTO)
 private Integer id;
+
 @Version
 private Integer version;
+
+@NotNull(message = "Name must be provided.")
+@Pattern(regexp="^[a-zA-Z]{1}$")
 private String name;
-@JsonIgnore
+
+@JsonBackReference
 @OneToMany(mappedBy="clasS",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 private List<StudentEntity> students=new ArrayList<>();
+
+@NotNull(message = "Grade must be provided.")
+@JsonManagedReference
 @ManyToOne(cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 @JoinColumn(name="grade")
 private GradeEntity grade;
-@JsonIgnore
+
+@JsonBackReference
 @OneToMany(mappedBy="clasS",cascade=CascadeType.REFRESH,fetch=FetchType.LAZY)
 protected List<TeacherGradeSubjectClassEntity> tgsc=new ArrayList<>();
+
 public ClassEntity() {}
+
 public Integer getId() {
 	return id;
 }
